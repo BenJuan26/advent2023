@@ -1,13 +1,21 @@
-package advent2021
+package advent2023
 
 import (
 	"bufio"
 	"os"
 )
 
+func ReadTestInput() ([]string, error) {
+	return ReadFromFile("test.txt")
+}
+
 func ReadInput() ([]string, error) {
+	return ReadFromFile("input.txt")
+}
+
+func ReadFromFile(filename string) ([]string, error) {
 	var lines []string
-	file, err := os.Open("input.txt")
+	file, err := os.Open(filename)
 	if err != nil {
 		return lines, err
 	}
