@@ -37,7 +37,7 @@ func ParseDigit(chars string) int {
 }
 
 func Part2() {
-	lines, err := advent.ReadTestInput()
+	lines, err := advent.ReadInput()
 	if err != nil {
 		panic(err)
 	}
@@ -46,19 +46,16 @@ func Part2() {
 	for _, line := range lines {
 		firstDigit := -1
 		lastDigit := -1
-		cursorStart := 0
 		cursorEnd := 1
-		for cursorEnd < len(line) {
-			digit := ParseDigit(line[cursorStart:cursorEnd])
-			cursorEnd += 1
+		for cursorEnd <= len(line) {
+			digit := ParseDigit(line[:cursorEnd])
 			if digit >= 0 {
 				if firstDigit < 0 {
 					firstDigit = digit
 				}
 				lastDigit = digit
-				cursorStart = cursorEnd + 1
-				cursorEnd += 1
 			}
+			cursorEnd += 1
 		}
 		value := firstDigit*10 + lastDigit
 		total += value
