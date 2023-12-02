@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"strings"
 
-	advent "github.com/BenJuan26/advent2022"
+	advent "github.com/BenJuan26/advent2023"
 )
 
 var writtenDigits = []string{

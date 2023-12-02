@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	advent "github.com/BenJuan26/advent2022"
+	advent "github.com/BenJuan26/advent2023"
 )
 
 func Part1() {
@@ -13,7 +13,7 @@ func Part1() {
 	}
 
 	for _, line := range lines {
-
+		line += " " // do something
 	}
 
 	fmt.Println("answer")

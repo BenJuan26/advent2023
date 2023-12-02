@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	advent "github.com/BenJuan26/advent2022"
+	advent "github.com/BenJuan26/advent2023"
 )
 
 func Part2() {
