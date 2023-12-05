@@ -3,6 +3,7 @@ package advent2023
 import (
 	"bufio"
 	"os"
+	"strconv"
 )
 
 func ReadTestInput() ([]string, error) {
@@ -31,6 +32,15 @@ func ReadFromFile(filename string) ([]string, error) {
 	}
 
 	return lines, nil
+}
+
+func MustAtoi(s string) int {
+	n, err := strconv.Atoi(s)
+	if err != nil {
+		panic(err)
+	}
+
+	return n
 }
 
 func ShouldRunPart1() bool {
