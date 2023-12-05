@@ -41,20 +41,20 @@ func (m *Map) MapRange(seedRanges []SeedRange) []SeedRange {
 			if mr.Source >= sr.Start && mr.Source+mr.Length-1 <= sr.Start+sr.Length-1 {
 				// come back to the two unmapped parts later
 				seedRanges = append(seedRanges, SeedRange{Start: sr.Start, Length: mr.Source - sr.Start})
-				seedRanges = append(seedRanges, SeedRange{Start: mr.Source + mr.Length, Length: sr.Start + sr.Length - mr.Source + mr.Length})
+				seedRanges = append(seedRanges, SeedRange{Start: mr.Source + mr.Length, Length: sr.Start + sr.Length - (mr.Source + mr.Length)})
 				results = append(results, SeedRange{Start: mr.Destination, Length: mr.Length})
 				continue
 			}
 			// partial overlap: seed starts first
 			if sr.Start < mr.Source && sr.Start+sr.Length < mr.Source+mr.Length {
 				seedRanges = append(seedRanges, SeedRange{Start: sr.Start, Length: mr.Source - sr.Start})
-				results = append(results, SeedRange{mr.Destination, sr.Length - (mr.Source - sr.Start)})
+				results = append(results, SeedRange{Start: mr.Destination, Length: sr.Length - (mr.Source - sr.Start)})
 				continue
 			}
 			// partial overlap: map starts first
 			if mr.Source < sr.Start && mr.Source+mr.Length < sr.Start+sr.Length {
-				seedRanges = append(seedRanges, SeedRange{Start: mr.Source + mr.Length, Length: mr.Source + mr.Length - (sr.Start + sr.Length - 1)})
-				results = append(results, SeedRange{Start: mr.Destination + sr.Start - mr.Source, Length: mr.Source + mr.Length - sr.Start})
+				seedRanges = append(seedRanges, SeedRange{Start: mr.Source + mr.Length, Length: mr.Source + mr.Length - sr.Start})
+				results = append(results, SeedRange{Start: mr.Destination + sr.Start - mr.Source, Length: mr.Length - (sr.Start - mr.Source)})
 				continue
 			}
 			panic("shouldn't reach here")
@@ -86,17 +86,19 @@ func Part2() {
 
 	maps := PopulateMaps(lines)
 
-	// locations := []SeedRange{}
-	// for _, sr := range seedRanges {
-	// 	r := []SeedRange{sr}
+	for _, sr := range seedRanges {
+		fmt.Printf("%d -> %d, ", sr.Start, sr.Start+sr.Length-1)
+	}
+	fmt.Println("")
 	for _, m := range maps {
 		seedRanges = m.MapRange(seedRanges)
+		for _, sr := range seedRanges {
+			fmt.Printf("%d -> %d, ", sr.Start, sr.Start+sr.Length-1)
+		}
+		fmt.Println("")
 	}
-	// locations = append(locations, r...)
-	// }
-
-	sort.Slice(seedRanges, func(i, j int) bool {
-		return seedRanges[i].Start < seedRanges[j].Start
-	})
+	// sort.Slice(seedRanges, func(i, j int) bool {
+	// 	return seedRanges[i].Start < seedRanges[j].Start
+	// })
 	fmt.Println(seedRanges[0].Start)
 }
