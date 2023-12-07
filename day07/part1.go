@@ -39,33 +39,54 @@ func (h Hand) Type() int {
 		return FiveOfAKind
 	}
 	if countsByTotal[4] == 1 {
+		if countsByNumber[1] == 4 || countsByNumber[1] == 1 {
+			return FiveOfAKind
+		}
 		return FourOfAKind
 	}
 	if countsByTotal[3] == 1 {
-		if countsByTotal[2] == 1 {
-			return FullHouse
-		} else {
-			return ThreeOfAKind
+		if countsByNumber[1] == 3 {
+			if countsByTotal[2] == 1 {
+				return FiveOfAKind
+			}
+			return FourOfAKind
 		}
+		if countsByTotal[2] == 1 {
+			if countsByNumber[1] == 2 {
+				return FiveOfAKind
+			}
+			return FullHouse
+		}
+		if countsByNumber[1] == 1 {
+			return FourOfAKind
+		}
+		return ThreeOfAKind
 	}
 	if countsByTotal[2] == 2 {
+		if countsByNumber[1] == 2 {
+			return FourOfAKind
+		}
+		if countsByNumber[1] == 1 {
+			return FullHouse
+		}
 		return TwoPair
 	}
 	if countsByTotal[2] == 1 {
+		if countsByNumber[1] == 1 || countsByNumber[1] == 2 {
+			return ThreeOfAKind
+		}
 		return OnePair
 	}
 	if countsByTotal[1] == 5 {
+		if countsByNumber[1] == 1 {
+			return OnePair
+		}
 		return HighCard
 	}
 	panic("shouldn't reach here")
 }
 
-func Part1() {
-	lines, err := advent.ReadInput()
-	if err != nil {
-		panic(err)
-	}
-
+func PopulateHands(lines []string, jokersWild bool) []Hand {
 	hands := []Hand{}
 	for _, line := range lines {
 		fields := strings.Split(line, " ")
@@ -80,7 +101,11 @@ func Part1() {
 			case 'Q':
 				cards = append(cards, 12)
 			case 'J':
-				cards = append(cards, 11)
+				if jokersWild {
+					cards = append(cards, 1)
+				} else {
+					cards = append(cards, 11)
+				}
 			case 'T':
 				cards = append(cards, 10)
 			default:
@@ -92,6 +117,10 @@ func Part1() {
 		hands = append(hands, hand)
 	}
 
+	return hands
+}
+
+func SortHands(hands []Hand) {
 	sort.Slice(hands, func(i, j int) bool {
 		type1 := hands[i].Type()
 		type2 := hands[j].Type()
@@ -107,6 +136,16 @@ func Part1() {
 
 		return false
 	})
+}
+
+func Part1() {
+	lines, err := advent.ReadInput()
+	if err != nil {
+		panic(err)
+	}
+
+	hands := PopulateHands(lines, false)
+	SortHands(hands)
 
 	total := 0
 	for i, hand := range hands {

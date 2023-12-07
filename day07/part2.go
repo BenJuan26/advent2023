@@ -12,5 +12,14 @@ func Part2() {
 		panic(err)
 	}
 
-	fmt.Println(lines[0])
+	hands := PopulateHands(lines, true)
+	SortHands(hands)
+
+	total := 0
+	for i, hand := range hands {
+		rank := i + 1
+		total += rank * hand.Bid
+	}
+
+	fmt.Println(total)
 }
